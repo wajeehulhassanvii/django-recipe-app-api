@@ -1,0 +1,11 @@
+
+- after creating docker for app run below command
+sudo docker build .
+
+after creating docker-compose for project, create django project running below commands
+it will create project in docker and in local since we attached app directory volume in docker build
+sudo docker-compose build
+sudo docker-compose run app sh -c "django-admin.py startproject app ."
+
+- So far we setup docker and docker buildm next we will connect travis-ci for ci
+travis can help us see errors as soon as we puch code to github
