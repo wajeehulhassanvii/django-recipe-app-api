@@ -1,11 +1,85 @@
 
 - after creating docker for app run below command
+-------------
+FROM python:3.7-alpine
+MAINTAINER Wajeeh Ul Hassan
+
+ENV PYTHONUNBUFFERED 1
+
+COPY ./requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
+
+RUN mkdir /app
+WORKDIR /app
+COPY ./app /app
+
+RUN adduser -D user
+USER user
+-------------
 sudo docker build .
+-----------------
 
 after creating docker-compose for project, create django project running below commands
 it will create project in docker and in local since we attached app directory volume in docker build
+--------------------------
+version: "3.7"
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    command:  >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+--------------------------
 sudo docker-compose build
 sudo docker-compose run app sh -c "django-admin.py startproject app ."
 
+----------------------------
 - So far we setup docker and docker buildm next we will connect travis-ci for ci
 travis can help us see errors as soon as we puch code to github
+define travis environment:
+language: python
+python:
+  - "3.7"
+
+services:
+  - docker
+
+before_script: pip install docker-compose
+
+script:
+  - docker-compose run app sh -c "python manage.py test && flake8"
+  ------------------------------
+  define flake 8 linter which will reside in app folder as .flake8
+  [flake8]
+exclude =
+migrations
+    __pycache__,
+    manage.py,
+    settings.py
+    --------------------------
+now build docker container after adding flake8
+sudo docker-compose build
+------------------------------
+
+    for testing:
+    sudo docker-compose run app sh -c "python manage.py test"
+    -----------------------
+
+    in TDD we write test first and then we write the function
+
+--------------------------
+sudo docker-compose run app sh -c "python manage.py startapp core"
+runs manage.py as our helper script
+------------------------------
+also change settings in app to accept User
+
+AUTH_USER_MODEL = 'core.User'
+------------------------
+RUN MIGRATIONS EVERYTIME DATABASE OR MODEL CHANGES
+sudo docker-compose run app sh -c "python manage.py test"
+-------------------------
