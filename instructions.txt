@@ -83,3 +83,29 @@ AUTH_USER_MODEL = 'core.User'
 RUN MIGRATIONS EVERYTIME DATABASE OR MODEL CHANGES
 sudo docker-compose run app sh -c "python manage.py test"
 -------------------------
+
+in docker componse we define postgres configuration and alsso connec
+it with our app service, next we modify the settings.py in django app
+
+--------------------------
+mocking is an advanced version of testing, mocking is when we 
+override or cchange the behaviour of the code being tested,
+we use it to avoid unintended side affect and isolate,
+eg send email -> we never want to send emails
+
+we never write test that depends on external services
+because we don't know if the services would be available at the
+time of tests and this makes the test unpredicatble and reliable
+
+it becomes spam
+
+we can override the dependency that sends email by MOCKING it
+we will use mocking on function that waits for database to
+become available
+
+------------------------
+we add management command, it waits for database to be available
+before continuing and running other database commands
+--------------------
+
+django commands in core/managements
