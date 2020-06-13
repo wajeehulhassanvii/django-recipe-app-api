@@ -5,4 +5,5 @@ migrations
     manage.py,
     settings.py,
     0001_initial.py,
-    0002_tag.py
+    0002_tag.py,
+    0003_ingredient.py
