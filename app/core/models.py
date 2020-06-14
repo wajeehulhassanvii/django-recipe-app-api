@@ -65,3 +65,33 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Recipe(models.Model):
+    """Recipe object"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+        )
+    title = models.CharField(max_length=255)
+    time_minutes = models.IntegerField()
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    # blank=True, null not recommended, blanknew recipe will have
+    # blank so we don't have to check for null
+    link = models.CharField(max_length=255, blank=True)
+    # ingredients and tags will be many to many
+    ingredients = models.ManyToManyField('Ingredient')
+    tags = models.ManyToManyField('Tag')
+    
+    def __str__(self):
+        return self.title
+
+
+"""
+NOTE:
+one to one foreign key will mean we will have one to one relation
+many to one -> many ingredients to one recipe
+many to many-> many recipes to many ingredients
+
+
+"""
